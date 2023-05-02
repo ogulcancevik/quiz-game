@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
-import { useCallback, useEffect, useMemo, useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import Answers from './components/Answers';
+import Begin from './components/Begin';
 import Loader from './components/Loader';
 import Question from './components/Question';
 import QuestionCounter from './components/QuestionCounter';
@@ -15,6 +16,7 @@ export function App() {
   );
   const [index, setIndex] = useState<number>(0);
   const [choises, setChoises] = useState<boolean[]>([]);
+  const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
   const [isGameFinished, setIsGameFinished] = useState<boolean>(false);
   useEffect(() => {
     (async () => {
@@ -27,7 +29,7 @@ export function App() {
     if (answer === correct) {
       setChoises([...choises, true]);
     } else return setChoises([...choises, false]);
-  }
+  };
   const nextQuestion = (answer: string, correct: string) => {
     if (index === questions.length - 1) {
       isQuestionCorrect(answer, correct);
@@ -43,6 +45,11 @@ export function App() {
   }, [index]);
   const { time, resetTimer } = useTimer(30);
   useEffect(() => {
+    if (isGameStarted) {
+      resetTimer();
+    }
+  }, [isGameStarted]);
+  useEffect(() => {
     if (time === 0) {
       nextQuestion('a', 'b'); // fake answer for wrong answer
       resetTimer();
@@ -52,38 +59,46 @@ export function App() {
     setIndex(0);
     setChoises([]);
     setIsGameFinished(false);
+    setIsGameStarted(false);
   };
-  if (currentQuestion) {
+  if (isGameStarted) {
+    if (currentQuestion) {
+      return (
+        <motion.div
+          key={index}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ ease: 'easeInOut', duration: 0.5 }}
+          class="flex flex-col justify-center gap-7 items-center w-screen h-screen"
+        >
+          {!isGameFinished ? (
+            <>
+              <QuestionCounter index={index} totalQuestion={questions.length} />
+              <Question question={currentQuestion?.question} />
+              <Answers
+                incorrect={currentQuestion?.incorrect_answers}
+                correct={currentQuestion?.correct_answer}
+                index={index}
+                nextQuestion={nextQuestion}
+              />
+              <div class="font-mono">
+                <span class="font-bold text-[#33cfffff]">{time}</span> seconds
+                left to answer
+              </div>
+            </>
+          ) : (
+            <Result choises={choises} resetGame={resetGame} />
+          )}
+        </motion.div>
+      );
+    }
     return (
-      <motion.div
-        key={index}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ ease: 'easeInOut', duration: 0.5 }}
-        class="flex flex-col justify-center gap-7 items-center w-screen h-screen"
-      >
-        {!isGameFinished ? (
-          <>
-            <QuestionCounter index={index} totalQuestion={questions.length} />
-            <Question question={currentQuestion?.question} />
-            <Answers
-              incorrect={currentQuestion?.incorrect_answers}
-              correct={currentQuestion?.correct_answer}
-              index={index}
-              nextQuestion={nextQuestion}
-            />
-            <div class="font-mono"><span class="font-bold text-[#33cfffff]">{time}</span> seconds left to answer</div>
-          </>
-        ) : (
-          <Result choises={choises} resetGame={resetGame} />
-        )}
-      </motion.div>
+      <div class="flex justify-center items-center h-screen w-screen">
+        <Loader />
+      </div>
     );
+  } else {
+    return <Begin startGame={() => setIsGameStarted(true)} />;
   }
-  return (
-    <div class="flex justify-center items-center h-screen w-screen">
-      <Loader />
-    </div>
-  );
 }
