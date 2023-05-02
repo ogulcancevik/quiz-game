@@ -6,7 +6,7 @@ This quiz app is developed using Preact. This app allows users to answer questio
 
 You must meet the following requirements to use this project:
 
-- Node.js 10 or higher
+- Node.js 16 or higher
 - NPM or Yarn
 
 ## Installation
