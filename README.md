@@ -1,6 +1,6 @@
-# Quiz App
+# Quiz Game
 
-This quiz app is developed using Preact. This app allows users to answer questions and view their results.
+This quiz game is developed using Preact. This game allows users to answer questions and view their results.
 
 ## Requirements
 
