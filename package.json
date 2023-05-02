@@ -1,6 +1,10 @@
 {
   "name": "quiz-game",
-  
+  "author": {
+    "name": "Oğulcan Çevik",
+    "email": "hello@ogulcancevik.com"
+  },
+  "description": "This quiz game is developed using Preact. This game allows users to answer questions and view their results.",
   "private": true,
   "version": "0.0.0",
   "type": "module",

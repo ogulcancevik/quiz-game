@@ -1,6 +1,6 @@
 # Quiz Game
 
-This quiz game is developed using Preact. This game allows users to answer questions and view their results.
+This quiz game is developed using Preact & Typescript. This game allows users to answer questions and view their results.
 
 ## Requirements
 
