@@ -61,7 +61,7 @@ export function App() {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ ease: 'easeInOut', duration: 0.5 }}
-        class="flex flex-col justify-center gap-10 items-center w-screen h-screen"
+        class="flex flex-col justify-center gap-7 items-center w-screen h-screen"
       >
         {!isGameFinished ? (
           <>
